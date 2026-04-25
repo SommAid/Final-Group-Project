@@ -4,6 +4,7 @@ import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 import { StoreProvider } from "@/components/StoreProvider";
 import { AuthProvider } from "@/components/AuthProvider";
+import ConfigureAmplifyClientSide from "@/components/ConfigureAmplify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} antialiased bg-white dark:bg-black text-black dark:text-white`}
       >
+        <ConfigureAmplifyClientSide />
         <AuthProvider>
           <StoreProvider>
             <div className="flex h-screen overflow-hidden">

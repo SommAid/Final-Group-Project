@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { LayoutDashboard, Search, Upload, ShoppingCart, UserX, LogOut } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { useAuthenticator } from "@aws-amplify/ui-react";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -12,6 +13,7 @@ function cn(...inputs: ClassValue[]) {
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { signOut } = useAuthenticator((context) => [context.signOut]);
 
   const links = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
@@ -48,13 +50,13 @@ export function Sidebar() {
         })}
       </nav>
       <div className="p-4 border-t dark:border-zinc-800">
-        <a
-          href="/api/auth/logout"
+        <button
+          onClick={signOut}
           className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/50"
         >
           <LogOut className="h-5 w-5" />
           Sign Out
-        </a>
+        </button>
       </div>
     </div>
   );
