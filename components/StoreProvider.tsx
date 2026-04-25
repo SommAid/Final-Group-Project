@@ -60,7 +60,23 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         const res = await fetch("/api/data");
         const json = await res.json();
 
-        if (json.householdsText) {
+        // Helper to convert lowercase Postgres keys to uppercase CSV headers
+        const toUpperCaseKeys = (arr: any[]) => arr.map(obj => {
+          const upperObj: any = {};
+          for (const [key, value] of Object.entries(obj)) {
+            upperObj[key.toUpperCase()] = value;
+          }
+          return upperObj;
+        });
+
+        // Check if data is coming from RDS directly (JSON arrays)
+        if (json.households && Array.isArray(json.households)) {
+          setHouseholds(toUpperCaseKeys(json.households));
+          setProducts(toUpperCaseKeys(json.products || []));
+          setTransactions(toUpperCaseKeys(json.transactions || []));
+        }
+        // Fallback for CSV text logic
+        else if (json.householdsText) {
           const hh = Papa.parse<Household>(json.householdsText, { header: true, skipEmptyLines: true }).data;
           setHouseholds(hh.map(row => {
             // Trim keys and values
@@ -72,7 +88,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           }));
         }
 
-        if (json.productsText) {
+        if (!json.households && json.productsText) {
           const pr = Papa.parse<Product>(json.productsText, { header: true, skipEmptyLines: true }).data;
           setProducts(pr.map(row => {
             const cleanRow: any = {};
@@ -83,7 +99,7 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
           }));
         }
 
-        if (json.transactionsText) {
+        if (!json.households && json.transactionsText) {
           const tr = Papa.parse<Transaction>(json.transactionsText, { header: true, skipEmptyLines: true }).data;
           setTransactions(tr.map(row => {
             const cleanRow: any = {};

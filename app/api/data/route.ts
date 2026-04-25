@@ -1,30 +1,19 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import pool from '@/lib/db';
 
 export async function GET() {
   try {
-    const basePath = path.join(process.cwd(), '8451_The_Complete_Journey_2_Sample-2');
-    
-    let householdsText = '';
-    let productsText = '';
-    let transactionsText = '';
-    
-    try {
-      householdsText = fs.readFileSync(path.join(basePath, '400_households.csv'), 'utf8');
-      productsText = fs.readFileSync(path.join(basePath, '400_products.csv'), 'utf8');
-      transactionsText = fs.readFileSync(path.join(basePath, '400_transactions.csv'), 'utf8');
-    } catch (fsError) {
-      console.error('Error reading files', fsError);
-    }
+    const householdsResult = await pool.query('SELECT * FROM households');
+    const productsResult = await pool.query('SELECT * FROM products');
+    const transactionsResult = await pool.query('SELECT * FROM transactions');
 
     return NextResponse.json({
-      householdsText,
-      productsText,
-      transactionsText
+      households: householdsResult.rows,
+      products: productsResult.rows,
+      transactions: transactionsResult.rows
     });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: 'Failed to fetch data' }, { status: 500 });
+    console.error('Database query error', error);
+    return NextResponse.json({ error: 'Failed to fetch data from RDS' }, { status: 500 });
   }
 }
