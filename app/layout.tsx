@@ -3,8 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
 import { StoreProvider } from "@/components/StoreProvider";
-import { AuthProvider } from "@/components/AuthProvider";
-import ConfigureAmplifyClientSide from "@/components/ConfigureAmplify";
+import AmplifyProvider from "@/components/AmplifyProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,8 +22,7 @@ export default function RootLayout({
       <body
         className={`${inter.className} antialiased bg-white dark:bg-black text-black dark:text-white`}
       >
-        <ConfigureAmplifyClientSide />
-        <AuthProvider>
+        <AmplifyProvider>
           <StoreProvider>
             <div className="flex h-screen overflow-hidden">
               <Sidebar />
@@ -33,7 +31,7 @@ export default function RootLayout({
               </main>
             </div>
           </StoreProvider>
-        </AuthProvider>
+        </AmplifyProvider>
       </body>
     </html>
   );
