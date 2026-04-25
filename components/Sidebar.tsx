@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, LogIn, Search, Upload, ShoppingCart, UserX } from "lucide-react";
+import { LayoutDashboard, Search, Upload, ShoppingCart, UserX, LogOut } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -15,7 +15,6 @@ export function Sidebar() {
 
   const links = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
-    { name: "Login Server", href: "/login", icon: LogIn },
     { name: "Data Pull", href: "/data-pull", icon: Search },
     { name: "Load Data", href: "/load-data", icon: Upload },
     { name: "Basket Analysis", href: "/basket-analysis", icon: ShoppingCart },
@@ -48,6 +47,15 @@ export function Sidebar() {
           );
         })}
       </nav>
+      <div className="p-4 border-t dark:border-zinc-800">
+        <a
+          href="/api/auth/logout"
+          className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/50"
+        >
+          <LogOut className="h-5 w-5" />
+          Sign Out
+        </a>
+      </div>
     </div>
   );
 }
