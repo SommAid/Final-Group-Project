@@ -1,3 +1,5 @@
+[Hosted Application](https://main.d2u8p5jk4dbpcy.amplifyapp.com/)
+
 # Retail Analytics Dashboard
 
 A Next.js application designed for simple retail analytics and interactive data exploration. This application explores different data analytic techniques like boosting, Adagrad, linear regression, and others to find patterns in customer transaction trends. This application is intended to be luanched through Amazon Webservices (AWS). This is accomplished with Amplify, Congnito, and RDS.
