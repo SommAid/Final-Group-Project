@@ -1,6 +1,6 @@
 # Retail Analytics Dashboard
 
-A modern Next.js application designed for robust retail analytics and interactive data exploration. This application fulfills the requirements for complex data science and analytics tasks by visualizing transactions, predicting churn, modeling basket associations, and securely authenticating users.
+A Next.js application designed for simple retail analytics and interactive data exploration. This application explores different data analytic techniques like boosting, Adagrad, linear regression, and others to find patterns in customer transaction trends. This application is intended to be luanched through Amazon Webservices (AWS). This is accomplished with Amplify, Congnito, and RDS.
 
 ## Application Architecture
 
