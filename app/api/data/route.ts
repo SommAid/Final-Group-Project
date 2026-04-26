@@ -3,9 +3,9 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const householdsResult = await pool.query('SELECT * FROM households LIMIT 1000');
-    const productsResult = await pool.query('SELECT * FROM products LIMIT 1000');
-    const transactionsResult = await pool.query('SELECT * FROM transactions LIMIT 1000');
+    const householdsResult = await pool.query('SELECT * FROM households LIMIT 10000');
+    const productsResult = await pool.query('SELECT * FROM products LIMIT 10000');
+    const transactionsResult = await pool.query('SELECT * FROM transactions LIMIT 10000');
 
     return NextResponse.json({
       households: householdsResult.rows,

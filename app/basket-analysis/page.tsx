@@ -15,17 +15,20 @@ export default function BasketAnalysisPage() {
     const productMap = new Map();
     products.forEach((p) => productMap.set(p.PRODUCT_NUM, p.COMMODITY || p.DEPARTMENT));
 
-    // Group products by Basket
+    // Group products by Household (HSHD_NUM) instead of Basket.
     const baskets: string[][] = [];
-    let currentBasket = "";
+    let currentGroup = "";
     let currentItems: Set<string> = new Set();
 
-    // Sort transactions by basket first to easily group them
-    const sortedT = [...transactions].sort((a, b) => a.BASKET_NUM.localeCompare(b.BASKET_NUM));
+    // Sort transactions by Household
+    const sortedT = [...transactions].sort((a, b) => (a.HSHD_NUM || "").localeCompare(b.HSHD_NUM || ""));
     sortedT.forEach((t) => {
-      if (t.BASKET_NUM !== currentBasket) {
+      const groupKey = t.HSHD_NUM;
+      if (!groupKey) return;
+
+      if (groupKey !== currentGroup) {
         if (currentItems.size > 0) baskets.push(Array.from(currentItems));
-        currentBasket = t.BASKET_NUM;
+        currentGroup = groupKey;
         currentItems = new Set();
       }
       const item = productMap.get(t.PRODUCT_NUM);
@@ -100,7 +103,7 @@ export default function BasketAnalysisPage() {
           <div className="mb-6 space-y-2">
             <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
               We decided to use <strong>Gradient Boosting </strong> approach for our Basket Analysis.
-              The algorithm sequentially learns across multiple epochs. 
+              The algorithm sequentially learns across multiple epochs.
               During each generationt he model calculates a an adjusted &quot;basket weight&quot; based on the baseline frequency of items.
               The model punishes overly common bnoise and thus &quot;boosts&quot; the values of distinct core points.
               The final score is a weighted scopre, creating a sharper boundary for high-value product combinations.

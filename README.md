@@ -1,48 +1,64 @@
 # Retail Analytics Dashboard
 
-A modern Next.js application that visualizes retail analytics and provides interactive data exploration, fulfilling the data science and analytics project requirements.
+A modern Next.js application designed for robust retail analytics and interactive data exploration. This application fulfills the requirements for complex data science and analytics tasks by visualizing transactions, predicting churn, modeling basket associations, and securely authenticating users.
+
+## Application Architecture
+
+This project is built using modern full-stack web technologies and is explicitly designed to be deployed seamlessly into the AWS ecosystem:
+- **Frontend Framework**: Next.js (App Router) & React 19
+- **Styling & UI**: Tailwind CSS, Lucide React Icons, and a custom `Card` component interface.
+- **Charts & Visualization**: Recharts (Responsive data visualization)
+- **Authentication**: AWS Cognito via AWS Amplify UI (`@aws-amplify/ui-react`), providing a seamless, secure login barrier that handles user sessions natively.
+- **Datastore**: Amazon RDS (PostgreSQL). The application retrieves analytical data (Households, Products, Transactions) dynamically from a live SQL database via Next.js API routes (`pg` node client), eliminating the need to parse raw local CSVs.
 
 ## Project Structure
 
 ```
-├── app/                  # Next.js App Router
-│   ├── api/data/         # API endpoint to load default local CSV data
-│   ├── data-pull/        # Interactive Data Pull page for Hshd_num search
-│   ├── load-data/        # Data Loading Web App for uploading new CSV datasets
-│   ├── login/            # Web Server Setup mock login page
-│   ├── layout.tsx        # Global layout with Sidebar navigation
-│   └── page.tsx          # Main Dashboard with Recharts visualizations
-├── components/           # Reusable React components
-│   ├── Sidebar.tsx       # Sidebar navigation UI
-│   └── StoreProvider.tsx # React Context for global state management of datasets
-├── lib/                  # Utility functions
-├── public/               # Static assets
-└── DEPLOYMENT.md         # Instructions for deploying to AWS and Azure
+├── app/                      # Next.js App Router Pages
+│   ├── api/data/route.ts     # Server-side API endpoint connecting to AWS RDS (Postgres)
+│   ├── basket-analysis/      # Data Science: Gradient Boosting approach to product pairings
+│   ├── churn-prediction/     # Data Science: RFM Scatter Plot with selectable ML model logic
+│   ├── data-pull/            # Interactive Data Pull interface (Search by Hshd_num)
+│   ├── load-data/            # Admin Interface: Client-side CSV uploading/parsing logic
+│   ├── layout.tsx            # Global layout enforcing AWS Amplify Authentication
+│   └── page.tsx              # Main Analytics Dashboard (Recharts visualizations)
+├── components/               # Reusable React components
+│   ├── ui/card.tsx           # Standardized structural UI elements
+│   ├── AmplifyProvider.tsx   # Global AWS Amplify Auth Context Configuration
+│   ├── Sidebar.tsx           # Sidebar navigation UI (includes dynamic user identity and Logout)
+│   └── StoreProvider.tsx     # React Context for global state management and datastore syncing
+├── lib/                      
+│   └── db.ts                 # PostgreSQL database pool connection setup
+├── init_db.sql               # Database initialization and raw data ingestion scripts for pgAdmin
+└── AWS_DEPLOYMENT_GUIDE.md   # Step-by-step instructions for a full production AWS deployment
 ```
 
-## Getting Started
+## Getting Started Locally
 
-First, install dependencies and run the development server:
+### 1. Prerequisites
+Ensure you have Node.js installed on your machine.
 
+### 2. Environment Variables
+You must connect the application to an AWS Cognito User Pool and an AWS RDS Database for the application to function. Create a `.env.local` file at the root of the project:
+
+```env
+# AWS Cognito Identity Setup
+NEXT_PUBLIC_USER_POOL_ID="us-east-1_xxxxxxxxx"
+NEXT_PUBLIC_USER_POOL_CLIENT_ID="xxxxxxxxxxxxxxxxxxxxxx"
+
+# AWS RDS PostgreSQL Connection
+DATABASE_URL="postgresql://<your_username>:<your_password>@<your_rds_endpoint>:5432/postgres?sslmode=require"
+```
+
+### 3. Installation
+Install the project dependencies using npm:
 ```bash
 npm install
+```
+
+### 4. Run the Development Server
+```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
-
-## Requirements Answers
-
-### 1. Write-Up on ML Models
-
-**i. Linear Regression:**
-A foundational statistical method that models the relationship between a dependent variable and one or more independent variables by fitting a linear equation to observed data. It is easy to interpret and computationally efficient but assumes a linear relationship, which may not capture complex patterns.
-
-**ii. Random Forest:**
-An ensemble learning method that constructs multiple decision trees during training and outputs the average prediction (for regression) or majority vote (for classification). It is highly robust to overfitting, handles non-linear relationships well, and provides feature importance metrics, making it a powerful tool for complex datasets.
-
-**iii. Gradient Boosting:**
-Another ensemble technique that builds models sequentially, with each new model attempting to correct the errors of the previous ones using gradient descent. While more prone to overfitting if not tuned properly and slower to train than Random Forests, it often yields higher predictive accuracy on complex, tabular data.
-
-**Predictive Modeling Technique for Customer Lifetime Value (CLV):**
-To predict long-term revenue potential (CLV) and prioritize high-value customers, **Gradient Boosting** (e.g., XGBoost or LightGBM) is the most effective technique. CLV prediction often involves complex, non-linear relationships between various customer features (purchase frequency, recency, average order value, demographics). Gradient Boosting excels at capturing these nuanced patterns and interactions in tabular transaction data, ultimately providing more accurate, granular revenue forecasts than Linear Regression or Random Forest, enabling highly targeted retention and marketing strategies.
+Open [http://localhost:3000](http://localhost:3000) with your browser. You will immediately be intercepted by the AWS Cognito login screen. Once authenticated, you will be securely routed to the Analytics Dashboard.
