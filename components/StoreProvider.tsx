@@ -61,10 +61,11 @@ export function StoreProvider({ children }: { children: React.ReactNode }) {
         const json = await res.json();
 
         // Helper to convert lowercase Postgres keys to uppercase CSV headers
+        // We also trim string values because raw RDS imports might contain trailing spaces
         const toUpperCaseKeys = (arr: any[]) => arr.map(obj => {
           const upperObj: any = {};
           for (const [key, value] of Object.entries(obj)) {
-            upperObj[key.toUpperCase()] = value;
+            upperObj[key.toUpperCase()] = typeof value === 'string' ? value.trim() : value;
           }
           return upperObj;
         });
