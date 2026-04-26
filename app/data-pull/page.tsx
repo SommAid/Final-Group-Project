@@ -8,6 +8,15 @@ export default function DataPullPage() {
   const { transactions, households, products, loading } = useStore();
   const [searchTerm, setSearchTerm] = useState("");
 
+  const availableHouseholds = useMemo(() => {
+    if (!transactions.length) return [];
+    const unique = new Set<string>();
+    transactions.forEach(t => {
+      if (t.HSHD_NUM) unique.add(t.HSHD_NUM);
+    });
+    return Array.from(unique).sort();
+  }, [transactions]);
+
   const filteredData = useMemo(() => {
     if (!searchTerm) return [];
 
@@ -61,8 +70,8 @@ export default function DataPullPage() {
         </p>
       </div>
 
-      <div className="flex max-w-sm items-center space-x-2">
-        <div className="relative flex-1">
+      <div className="flex flex-col max-w-3xl space-y-4">
+        <div className="relative w-full max-w-sm">
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-zinc-500" />
           <input
             type="text"
@@ -72,6 +81,28 @@ export default function DataPullPage() {
             className="flex h-10 w-full rounded-md border border-zinc-300 bg-transparent pl-9 pr-3 py-2 text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-2 dark:border-zinc-700 dark:focus:ring-zinc-800 dark:focus:ring-offset-zinc-900"
           />
         </div>
+
+        {availableHouseholds.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+              Available Households (Click to search)
+            </p>
+            <div className="flex flex-wrap gap-2 max-h-32 overflow-y-auto p-3 border rounded-md border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/50">
+              {availableHouseholds.map(num => (
+                <button
+                  key={num}
+                  onClick={() => setSearchTerm(num)}
+                  className={`px-2 py-1 text-xs font-medium rounded-md transition-colors ${searchTerm === num
+                      ? "bg-blue-100 text-blue-900 border-blue-200 dark:bg-blue-900/40 dark:text-blue-100 dark:border-blue-800"
+                      : "bg-white border border-zinc-200 hover:bg-zinc-100 hover:border-zinc-300 dark:bg-zinc-950 dark:border-zinc-800 dark:hover:bg-zinc-900 dark:text-zinc-300"
+                    }`}
+                >
+                  {num}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="rounded-xl border bg-card text-card-foreground shadow-sm dark:border-zinc-800 overflow-hidden">
