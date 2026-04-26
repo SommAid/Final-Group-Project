@@ -24,30 +24,46 @@ export default function Dashboard() {
 
   const spendByDepartment = useMemo(() => {
     if (!transactions.length || !products.length) return [];
-    
-    const productMap = new Map();
-    products.forEach(p => productMap.set(p.PRODUCT_NUM, p.DEPARTMENT));
+
+    const productMap = new Map<number, string>();
+    products.forEach((p: any) => {
+      const id = p.product_num ?? p.PRODUCT_NUM;
+      const dept = p.department ?? p.DEPARTMENT;
+
+      if (id !== undefined && dept) {
+        productMap.set(id, dept.trim());
+      }
+    });
 
     const spendMap: Record<string, number> = {};
-    transactions.forEach(t => {
-      const dept = productMap.get(t.PRODUCT_NUM);
-      spendMap[dept] = (spendMap[dept] || 0) + parseFloat(t.SPEND || "0");
+
+    transactions.forEach((t: any) => {
+      const id = t.product_num ?? t.PRODUCT_NUM;
+      const spendValue = t.spend ?? t.SPEND ?? "0";
+
+      if (id !== undefined) {
+        const dept = productMap.get(id);
+
+        if (dept && dept !== "UNKNOWN") {
+          spendMap[dept] = (spendMap[dept] || 0) + parseFloat(spendValue.toString());
+        }
+      }
     });
 
     return Object.entries(spendMap)
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => b.value - a.value)
-      .slice(0, 5); // top 5
+      .slice(0, 5); // Take only the top 5
   }, [transactions, products]);
 
   const spendByWeek = useMemo(() => {
     if (!transactions.length) return [];
-    
+
     const spendMap: Record<string, number> = {};
     transactions.forEach(t => {
-      const week = t.WEEK_NUM;
+      const week = t.week_num;
       if (week) {
-        spendMap[week] = (spendMap[week] || 0) + parseFloat(t.SPEND || "0");
+        spendMap[week] = (spendMap[week] || 0) + parseFloat(t.spend || "0");
       }
     });
 
@@ -60,12 +76,12 @@ export default function Dashboard() {
     if (!transactions.length || !households.length) return [];
 
     const hshdMap = new Map();
-    households.forEach(h => hshdMap.set(h.HSHD_NUM, h.HH_SIZE));
+    households.forEach(h => hshdMap.set(h.hshd_num, h.hh_size));
 
     const spendMap: Record<string, number> = {};
     transactions.forEach(t => {
-      const size = hshdMap.get(t.HSHD_NUM) || "Unknown";
-      spendMap[size] = (spendMap[size] || 0) + parseFloat(t.SPEND || "0");
+      const size = hshdMap.get(t.hshd_num) || "Unknown";
+      spendMap[size] = (spendMap[size] || 0) + parseFloat(t.spend || "0");
     });
 
     return Object.entries(spendMap)

@@ -13,7 +13,7 @@ export default function BasketAnalysisPage() {
 
     // Map Product_Num to DEPARTMENT
     const productMap = new Map();
-    products.forEach((p) => productMap.set(p.PRODUCT_NUM, p.COMMODITY || p.DEPARTMENT));
+    products.forEach((p) => productMap.set(p.product_num, p.commodity || p.department));
 
     // Group products by Household (HSHD_NUM) instead of Basket.
     const baskets: string[][] = [];
@@ -21,9 +21,10 @@ export default function BasketAnalysisPage() {
     let currentItems: Set<string> = new Set();
 
     // Sort transactions by Household
-    const sortedT = [...transactions].sort((a, b) => (a.HSHD_NUM || "").localeCompare(b.HSHD_NUM || ""));
+    const sortedT = [...transactions].sort((a, b) => (a.hshd_num || "").localeCompare(b.hshd_num || ""));
     sortedT.forEach((t) => {
-      const groupKey = t.HSHD_NUM;
+      const groupKey = t.hshd_num;
+
       if (!groupKey) return;
 
       if (groupKey !== currentGroup) {
@@ -31,7 +32,7 @@ export default function BasketAnalysisPage() {
         currentGroup = groupKey;
         currentItems = new Set();
       }
-      const item = productMap.get(t.PRODUCT_NUM);
+      const item = productMap.get(t.product_num);
       if (item) currentItems.add(item);
     });
     if (currentItems.size > 0) baskets.push(Array.from(currentItems));
