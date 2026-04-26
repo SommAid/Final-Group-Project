@@ -66,4 +66,4 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000) with your browser. You will immediately be intercepted by the AWS Cognito login screen. Once authenticated, you will be securely routed to the Analytics Dashboard.
 
 Authors:
-Aidan Sommers & Atharv Shete
+Aidan Sommer & Atharv Shete
