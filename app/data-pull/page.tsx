@@ -12,7 +12,7 @@ export default function DataPullPage() {
     if (!transactions.length) return [];
     const unique = new Set<string>();
     transactions.forEach(t => {
-      if (t.hshd_num) unique.add(t.hshd_num);
+      if (t.HSHD_NUM) unique.add(t.HSHD_NUM);
     });
     return Array.from(unique).sort();
   }, [transactions]);
@@ -24,19 +24,19 @@ export default function DataPullPage() {
 
     // Create maps for quick lookup
     const productMap = new Map();
-    products.forEach(p => productMap.set(p.product_num, p));
+    products.forEach(p => productMap.set(p.PRODUCT_NUM, p));
 
     const result = transactions
-      .filter(t => t.hshd_num === searchNum)
+      .filter(t => t.HSHD_NUM === searchNum)
       .map(t => {
-        const prod = productMap.get(t.product_num);
+        const prod = productMap.get(t.PRODUCT_NUM);
         return {
-          HSHD_NUM: t.hshd_num,
-          BASKET_NUM: t.basket_num,
-          DATE: t.purchase_,
-          PRODUCT_NUM: t.product_num,
-          DEPARTMENT: prod?.department || "Unknown",
-          COMMODITY: prod?.commodity || "Unknown",
+          HSHD_NUM: t.HSHD_NUM,
+          BASKET_NUM: t.BASKET_NUM,
+          DATE: t.PURCHASE_,
+          PRODUCT_NUM: t.PRODUCT_NUM,
+          DEPARTMENT: prod?.DEPARTMENT || "Unknown",
+          COMMODITY: prod?.COMMODITY || "Unknown",
         };
       });
 

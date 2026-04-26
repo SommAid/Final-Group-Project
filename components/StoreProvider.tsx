@@ -4,35 +4,35 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import Papa from "papaparse";
 
 type Household = {
-  hshd_num: string;
-  l: string;
-  age_range: string;
-  marital: string;
-  income_range: string;
-  homeowner: string;
-  hshd_composition: string;
-  hh_size: string;
-  children: string;
+  HSHD_NUM: string;
+  L: string;
+  AGE_RANGE: string;
+  MARITAL: string;
+  INCOME_RANGE: string;
+  HOMEOWNER: string;
+  HSHD_COMPOSITION: string;
+  HH_SIZE: string;
+  CHILDREN: string;
 };
 
 type Product = {
-  product_num: string;
-  department: string;
-  commodity: string;
-  brand_ty: string;
-  natural_organic_flag: string;
+  PRODUCT_NUM: string;
+  DEPARTMENT: string;
+  COMMODITY: string;
+  BRAND_TY: string;
+  NATURAL_ORGANIC_FLAG: string;
 };
 
 type Transaction = {
-  basket_num: string;
-  hshd_num: string;
-  purchase_: string;
-  product_num: string;
-  spend: string;
-  units: string;
-  store_r: string;
-  week_num: string;
-  year: string;
+  BASKET_NUM: string;
+  HSHD_NUM: string;
+  PURCHASE_: string;
+  PRODUCT_NUM: string;
+  SPEND: string;
+  UNITS: string;
+  STORE_R: string;
+  WEEK_NUM: string;
+  YEAR: string;
 };
 
 type AppContextType = {

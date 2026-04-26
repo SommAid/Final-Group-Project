@@ -16,23 +16,23 @@ export default function ChurnPredictionPage() {
     let maxDate = new Date(0);
 
     transactions.forEach((t) => {
-      if (!t.purchase_ || !t.spend) return;
+      if (!t.PURCHASE_ || !t.SPEND) return;
       
-      const date = new Date(t.purchase_);
+      const date = new Date(t.PURCHASE_);
       if (isNaN(date.getTime())) return;
       
       if (date > maxDate) maxDate = date;
 
-      if (!hshdStats[t.hshd_num]) {
-        hshdStats[t.hshd_num] = { lastPurchaseDate: date, frequency: 0, totalSpend: 0 };
+      if (!hshdStats[t.HSHD_NUM]) {
+        hshdStats[t.HSHD_NUM] = { lastPurchaseDate: date, frequency: 0, totalSpend: 0 };
       }
 
-      const stats = hshdStats[t.hshd_num];
+      const stats = hshdStats[t.HSHD_NUM];
       if (date > stats.lastPurchaseDate) {
         stats.lastPurchaseDate = date;
       }
       stats.frequency += 1;
-      stats.totalSpend += parseFloat(t.spend || "0");
+      stats.totalSpend += parseFloat(t.SPEND || "0");
     });
 
     return Object.entries(hshdStats).map(([hshdNum, stats]) => {

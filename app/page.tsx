@@ -61,9 +61,9 @@ export default function Dashboard() {
 
     const spendMap: Record<string, number> = {};
     transactions.forEach(t => {
-      const week = t.week_num;
+      const week = t.WEEK_NUM;
       if (week) {
-        spendMap[week] = (spendMap[week] || 0) + parseFloat(t.spend || "0");
+        spendMap[week] = (spendMap[week] || 0) + parseFloat(t.SPEND || "0");
       }
     });
 
@@ -76,12 +76,12 @@ export default function Dashboard() {
     if (!transactions.length || !households.length) return [];
 
     const hshdMap = new Map();
-    households.forEach(h => hshdMap.set(h.hshd_num, h.hh_size));
+    households.forEach(h => hshdMap.set(h.HSHD_NUM, h.HH_SIZE));
 
     const spendMap: Record<string, number> = {};
     transactions.forEach(t => {
-      const size = hshdMap.get(t.hshd_num) || "Unknown";
-      spendMap[size] = (spendMap[size] || 0) + parseFloat(t.spend || "0");
+      const size = hshdMap.get(t.HSHD_NUM) || "Unknown";
+      spendMap[size] = (spendMap[size] || 0) + parseFloat(t.SPEND || "0");
     });
 
     return Object.entries(spendMap)
