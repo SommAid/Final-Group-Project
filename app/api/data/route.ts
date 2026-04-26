@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server';
 import pool from '@/lib/db';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const householdsResult = await pool.query('SELECT * FROM households');
-    const productsResult = await pool.query('SELECT * FROM products');
-    const transactionsResult = await pool.query('SELECT * FROM transactions');
+    const householdsResult = await pool.query('SELECT * FROM households LIMIT 1000');
+    const productsResult = await pool.query('SELECT * FROM products LIMIT 1000');
+    const transactionsResult = await pool.query('SELECT * FROM transactions LIMIT 1000');
 
     return NextResponse.json({
       households: householdsResult.rows,
