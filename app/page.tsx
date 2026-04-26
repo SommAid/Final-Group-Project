@@ -30,7 +30,7 @@ export default function Dashboard() {
 
     const spendMap: Record<string, number> = {};
     transactions.forEach(t => {
-      const dept = productMap.get(t.PRODUCT_NUM) || "UNKNOWN";
+      const dept = productMap.get(t.PRODUCT_NUM);
       spendMap[dept] = (spendMap[dept] || 0) + parseFloat(t.SPEND || "0");
     });
 
@@ -148,7 +148,7 @@ export default function Dashboard() {
                     outerRadius={100}
                     fill="#8884d8"
                     dataKey="value"
-                    label={({ name, percent }) => `${name} (${(percent ?? 0 * 100).toFixed(0)}%)`}
+                    label={({ name, percent }) => `${name} (${((percent || 0) * 100).toFixed(0)}%)`}
                   >
                     {spendByHouseholdSize.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
