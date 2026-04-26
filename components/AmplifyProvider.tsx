@@ -24,9 +24,13 @@ export default function AmplifyProvider({ children }: { children: React.ReactNod
   return (
     <Authenticator.Provider>
       <div className="flex min-h-screen w-full flex-col bg-zinc-50 dark:bg-zinc-950">
-        <Authenticator hideSignUp={false}>
+        <Authenticator
+          hideSignUp={false}
+          loginMechanisms={['email']}
+        >
           {children}
         </Authenticator>
+
       </div>
     </Authenticator.Provider>
   );
